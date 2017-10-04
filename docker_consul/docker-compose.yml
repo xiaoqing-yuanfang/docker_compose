@@ -1,0 +1,38 @@
+version: "2.0"
+services:
+        server_init:
+                image: consul
+                expose:
+                        - "8500"
+                        - "8600"
+                        - "8301"
+                        - "8302"
+                ports:
+                        - "10000:10000"
+                command:  agent -server -bootstrap-expect 3 -data-dir /tmp/consul -client=0.0.0.0 -ui
+        server_other:
+                image: consul 
+                expose:
+                        - "8500"
+                        - "8600"
+                        - "8301"
+                        - "8302"
+                depends_on:
+                        - server_init
+                command: agent -server -bootstrap-expect 3 -data-dir /tmp/consul -client=0.0.0.0 -join=server_init
+                links:
+                        - server_init
+
+        agent:
+                image: consul 
+                expose:
+                        - "8500"
+                        - "8600"
+                        - "8301"
+                        - "8302"
+                depends_on:
+                        - server_init
+                command: agent -data-dir /tmp/consul -client=0.0.0.0 -join=server_init
+                links:
+                        - server_init
+
