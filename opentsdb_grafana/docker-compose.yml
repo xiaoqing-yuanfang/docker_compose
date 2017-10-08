@@ -1,0 +1,15 @@
+version: "2.0"
+services:
+        opentsdb:
+                image: petergrace/opentsdb-docker
+                expose:
+                        - "4242"
+                ports:
+                        - "4242:4242"
+
+        grafana:
+                image: grafana/grafana 
+                expose:
+                        - "3000"
+                ports:
+                        - "3000:3000"
